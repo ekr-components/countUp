@@ -14,6 +14,17 @@ that needs to be animated.
 
 This will automatically parse out the digits from the string.
 
+The component will listen for the event `count`. When this event is triggered,
+it will start at the initial number (0 if it's counting up) and then loop
+through all the intervals until it reaches the target number.
+
+```js
+jQuery('[data-component="countup"]).trigger('count');
+```
+
+This is mainly set up this way so that the counting can be triggered on
+scrolling events.
+
 ### Counting Direction
 
 By default, the number will count down if it's less than 10, and count up if
@@ -32,6 +43,6 @@ Valid values for `data-countup-direction` are `up` and `down`
 
 ## How does this work?
 
-Basically, it takes the number in the string, divides it by 100, then animated
+Basically, it takes the number in the string, divides it by 100, then animates
 through those 100 intervals.
 
