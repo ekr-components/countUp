@@ -44,5 +44,5 @@ Valid values for `data-countup-direction` are `up` and `down`
 ## How does this work?
 
 Basically, it takes the number in the string, divides it by 100, then animates
-through those 100 intervals.
+through those 100 intervals. The default interval between animations is 20ms.
 
