@@ -1,73 +1,68 @@
 var components = components || {};
 
 jQuery(document).ready(function() {
-	jQuery('[data-component="countup"]').each(function() { 
-		var countUp = new components.countUp(this); 
+	jQuery('[data-component="countup"]').each(function() {
+		var countUp = new components.countUp(this);
 	});
 });
 
 components.countUp = function(el) {
-	var self = this;
-	self.el = jQuery(el);
-	self.initString = self.el.text();
-	self.initNum = self.el.text().match(/[0-9,.]+/)[0];
-	self.initNum = self.initNum.replace(',','');
-	self.direction = self.data('countup-direction');
-	if(!self.direction) {
-		if(self.initNum < 10) {
-			self.direction = 'down';
+	this.el = jQuery(el);
+	this.initString = this.el.text();
+	this.initNum = this.el.text().match(/[0-9,.]+/)[0];
+	this.initNum = this.initNum.replace(',','');
+	this.direction = this.data('countup-direction');
+	if(!this.direction) {
+		if(this.initNum < 10) {
+			this.direction = 'down';
 		} else {
-			self.direction = 'up';
+			this.direction = 'up';
 		}
 	}
-	if(String(self.initNum.indexOf('.')) != -1) {
-		self.initNum = parseFloat(self.initNum);
+	if(String(this.initNum.indexOf('.')) != -1) {
+		this.initNum = parseFloat(this.initNum);
 	} else {
-		self.initNum = parseInt(self.initNum);
+		this.initNum = parseInt(this.initNum);
 	}
-	if(self.direction === 'down') {
-		self.startNum = 100 * self.initNum;
-		self.increment = self.startNum / 100;
+	if(this.direction === 'down') {
+		this.startNum = 100 * this.initNum;
+		this.increment = this.startNum / 100;
 	} else {
-		self.startNum = 0;
-		self.increment = self.initNum / 100;
-		if(self.initNum > 100) {
-			self.increment = parseInt(self.increment);
+		this.startNum = 0;
+		this.increment = this.initNum / 100;
+		if(this.initNum > 100) {
+			this.increment = parseInt(this.increment);
 		}
 	}
-	self.template = self.el.text().trim().replace(/[0-9.,]+/g, "{{num}}");
-	self.init();
+	this.template = this.el.text().trim().replace(/[0-9.,]+/g, "{{num}}");
+	this.init();
 };
 components.countUp.prototype = {
 	init: function() {
-		var self = this;
-		self.el.on('count', function() {
-			self.count();
-		});
+		this.el.on('count', this.count.bind(this));
 	},
 	count: function() {
-		var self = this;
-		self.currentNum = self.startNum;
-		self.el.text(self.template.replace('{{num}}', self.startNum));
-		self.interval = setInterval(function() {
-			if(self.direction == 'up') {
-				self.currentNum += self.increment;
+		this.currentNum = this.startNum;
+		this.el.text(this.template.replace('{{num}}', this.startNum));
+		this.interval = setInterval(function() {
+			if(this.direction == 'up') {
+				this.currentNum += this.increment;
 			} else {
-				self.currentNum -= self.increment;
+				this.currentNum -= this.increment;
 			}
 			if(
-				(self.direction == 'up' && self.currentNum >= self.initNum) ||
-				(self.direction == 'down' && self.currentNum <= self.initNum)
+				(this.direction == 'up' && this.currentNum >= this.initNum) ||
+				(this.direction == 'down' && this.currentNum <= this.initNum)
 			) {
-				clearInterval(self.interval);
-				self.el.text(self.initString);
+				clearInterval(this.interval);
+				this.el.text(this.initString);
 			} else {
-				if(String(self.currentNum).indexOf('.') !== -1) {
-					self.el.text(self.template.replace('{{num}}', parseFloat(self.currentNum).toFixed(1)));
+				if(String(this.currentNum).indexOf('.') !== -1) {
+					this.el.text(this.template.replace('{{num}}', parseFloat(this.currentNum).toFixed(1)));
 				} else {
-					self.el.text(self.template.replace('{{num}}', self.currentNum));
+					this.el.text(this.template.replace('{{num}}', this.currentNum));
 				}
 			}
-		}, 20);
+		}.bind(this), 20);
 	},
 };
